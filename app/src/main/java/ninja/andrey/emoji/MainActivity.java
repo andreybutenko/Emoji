@@ -54,14 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            Log.d("GETITEM", String.valueOf(position));
-
             if(position == 0) {
-                Log.d("GETITEM", "trans");
                 return TranslateFragment.newInstance(position + 1);
             }
             else {
-                Log.d("GETITEM", "search");
                 return SearchFragment.newInstance(position + 1);
             }
         }
