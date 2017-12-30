@@ -1,6 +1,7 @@
 package ninja.andrey.emoji;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -19,6 +21,8 @@ import android.widget.TextView;
 import com.vanniktech.emoji.EmojiTextView;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
+
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -53,6 +57,16 @@ public class SearchFragment extends Fragment {
         emojiListView = (ListView) getView().findViewById(R.id.emoji_list);
         emojiArrayAdapter = new EmojiArrayAdapter(getContext(), emojiList);
         emojiListView.setAdapter(emojiArrayAdapter);
+        emojiListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedUnicode = emojiList.get(i).getUnicode();
+
+                Intent intent = new Intent(getContext(), DetailActivity.class);
+                intent.putExtra(DetailActivity.UNICODE_EXTRA, selectedUnicode);
+                startActivity(intent);
+            }
+        });
 
         searchInput = (EditText) getView().findViewById(R.id.search_input);
         searchInput.addTextChangedListener(searchInputTextWatcher);
@@ -63,8 +77,8 @@ public class SearchFragment extends Fragment {
         List<Emoji> emojiResults = new LinkedList<>();
         for(Emoji emoji : emojiAll) {
             String description = emoji.getDescription();
-            Log.d("SEARCH", search + "??" + description);
-            if(description.contains(search)) {
+            String primaryAlias = emoji.getAliases().get(0).replace("_", " ");
+            if(description.contains(search) || primaryAlias.contains(search)) {
                 emojiResults.add(emoji);
             }
         }
@@ -87,7 +101,7 @@ public class SearchFragment extends Fragment {
             View rowView = inflater.inflate(R.layout.list_emoji, parent, false);
 
             TextView emojiDescription = (TextView) rowView.findViewById(R.id.emoji_description);
-            emojiDescription.setText(values.get(position).getDescription());
+            emojiDescription.setText(WordUtils.capitalizeFully(values.get(position).getDescription()));
 
             TextView emojiPreview = (TextView) rowView.findViewById(R.id.emoji_preview);
             emojiPreview.setText(values.get(position).getUnicode());
