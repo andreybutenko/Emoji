@@ -3,6 +3,7 @@ package ninja.andrey.emoji;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -90,6 +91,10 @@ public class DetailActivity extends AppCompatActivity {
 
         if(!emoji.supportsFitzpatrick()) {
             skinToneSpinner.setVisibility(View.GONE);
+        }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            detailView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
     }
 
