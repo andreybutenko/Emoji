@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -52,6 +54,14 @@ public class TranslateFragment extends Fragment {
             LayoutTransition layoutTransition = rootView.getLayoutTransition();
             layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
         }
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Snackbar.make(emojiOutput, "See what your emoji look like on an iPhone!", Snackbar.LENGTH_LONG).show();
+            }
+        }, 500);
     }
 
     TextWatcher emojiInputTextWatcher = new TextWatcher() {

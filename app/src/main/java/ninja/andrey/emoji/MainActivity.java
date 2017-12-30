@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EmojiManager.install(new IosEmojiProvider()); // must be before setContentView
+        EmojiManager.install(new IosEmojiProvider());
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_pager);
         viewPager.setAdapter(new EmojiPagerAdapter(getSupportFragmentManager(),
