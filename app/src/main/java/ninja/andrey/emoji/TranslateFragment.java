@@ -1,8 +1,10 @@
 package ninja.andrey.emoji;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -44,6 +46,12 @@ public class TranslateFragment extends Fragment {
         emojiInput = (EditText) getView().findViewById(R.id.input);
         emojiOutput = (EmojiTextView) getView().findViewById(R.id.emoji_output);
         emojiInput.addTextChangedListener(emojiInputTextWatcher);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            ViewGroup rootView = (ViewGroup) getView().findViewById(R.id.translate_root);
+            LayoutTransition layoutTransition = rootView.getLayoutTransition();
+            layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+        }
     }
 
     TextWatcher emojiInputTextWatcher = new TextWatcher() {
