@@ -1,9 +1,10 @@
 package ninja.andrey.emoji;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,52 +17,45 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.vanniktech.emoji.EmojiTextView;
-import com.vanniktech.emoji.ios.IosEmojiProvider;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchFragment extends Fragment {
+    public static final String ARG_PAGE = "ARG_PAGE";
+    private int page;
+
     List<Emoji> emojiList = new LinkedList<>();
     ListView emojiListView;
     EditText searchInput;
     EmojiArrayAdapter emojiArrayAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        com.vanniktech.emoji.EmojiManager.install(new IosEmojiProvider()); // must be before setContentView
-        setContentView(R.layout.activity_search);
-
-        emojiList = getEmojiResults("");
-
-        emojiListView = (ListView) findViewById(R.id.emoji_list);
-        emojiArrayAdapter = new EmojiArrayAdapter(this, emojiList);
-        emojiListView.setAdapter(emojiArrayAdapter);
-
-        searchInput = (EditText) findViewById(R.id.search_input);
-        searchInput.addTextChangedListener(searchInputTextWatcher);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.search_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+    public static SearchFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_PAGE, page);
+        SearchFragment fragment = new SearchFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        page = getArguments().getInt(ARG_PAGE);
+        emojiList = getEmojiResults("");
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        emojiListView = (ListView) getView().findViewById(R.id.emoji_list);
+        emojiArrayAdapter = new EmojiArrayAdapter(getContext(), emojiList);
+        emojiListView.setAdapter(emojiArrayAdapter);
+
+        searchInput = (EditText) getView().findViewById(R.id.search_input);
+        searchInput.addTextChangedListener(searchInputTextWatcher);
     }
 
     private List<Emoji> getEmojiResults(String search) {
@@ -89,8 +83,7 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = inflater.inflate(R.layout.list_emoji, parent, false);
 
             TextView emojiDescription = (TextView) rowView.findViewById(R.id.emoji_description);
@@ -117,4 +110,9 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable editable) {}
     };
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_search, container, false);
+    }
 }

@@ -29,6 +29,7 @@ dependencies {
     compile 'com.vanniktech:emoji-ios:0.5.1'
     compile 'com.vdurmont:emoji-java:4.0.0'
     compile 'com.android.support:design:26.+'
+    compile 'com.android.support:support-v4:26.+'
     testCompile 'junit:junit:4.12'
 }
 
