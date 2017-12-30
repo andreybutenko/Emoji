@@ -1,9 +1,11 @@
 package ninja.andrey.emoji;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.vanniktech.emoji.EmojiManager;
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
         emojiOutput = (EmojiTextView) findViewById(R.id.emoji_output);
 
         emojiInput.addTextChangedListener(emojiInputTextWatcher);
+
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
     }
 
     TextWatcher emojiInputTextWatcher = new TextWatcher() {
