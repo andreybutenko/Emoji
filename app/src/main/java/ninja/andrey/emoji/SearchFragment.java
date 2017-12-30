@@ -101,7 +101,7 @@ public class SearchFragment extends Fragment {
             View rowView = inflater.inflate(R.layout.list_emoji, parent, false);
 
             TextView emojiDescription = (TextView) rowView.findViewById(R.id.emoji_description);
-            emojiDescription.setText(WordUtils.capitalizeFully(values.get(position).getDescription()));
+            emojiDescription.setText(WordUtils.capitalizeFully(values.get(position).getAliases().get(0).replace("_", " ")));
 
             TextView emojiPreview = (TextView) rowView.findViewById(R.id.emoji_preview);
             emojiPreview.setText(values.get(position).getUnicode());

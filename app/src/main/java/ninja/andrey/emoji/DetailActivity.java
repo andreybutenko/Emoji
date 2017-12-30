@@ -49,7 +49,7 @@ public class DetailActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        getSupportActionBar().setTitle("Emoji Detail");
+        getSupportActionBar().setTitle(WordUtils.capitalizeFully(emoji.getAliases().get(0).replace("_", " ")));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +78,7 @@ public class DetailActivity extends AppCompatActivity {
         skinToneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                int modifier = Math.min(i - 1, 0);
+                int modifier = Math.max(i - 1, 0);
                 updateEmoji(emoji, modifier);
             }
 
@@ -103,6 +103,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void updateEmoji(Emoji emoji, int modifier) {
         String newValue = emoji.getUnicode();
+
         if(emoji.supportsFitzpatrick()) {
             newValue = emoji.getUnicode(Fitzpatrick.values()[modifier]);
         }
